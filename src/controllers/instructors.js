@@ -9,7 +9,7 @@ function getAll(req, res, next){
   .then(function(data){
     res.status(200).send({data})
   })
-  .catch(next)
+  .catch(next) //error handling
 }
 
 function getOne(req, res, next){

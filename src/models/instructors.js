@@ -5,7 +5,7 @@ const db = require('../../db')
 //////////////////////////////////////////////////////////////////////////////
 
 function getAll(){
-  return db('instructors')
+  return db('instructors')  // select * from instructors
 }
 
 function getOne(instructorId){
@@ -15,10 +15,10 @@ function getOne(instructorId){
 function create(name){
   return (
     db('instructors')
-    .insert({ name })
-    .returning('*')
-    .then(function([data]){
-      return data
+    .insert({ name })   // By default, receive back how many records of insertion
+    .returning('*')     // Special syntax to receive back the informationa bout what I created
+    .then(function([data]){   // Deconstructing the array [data] -> data  === data -> data[0]
+      return data             // Unwraps the array (takes it out of the square brackets)
     })
   )
 }
@@ -27,7 +27,7 @@ function update(instructorId, name){
   return (
     db('instructors')
     .update({ name })
-    .where({ id: instructorId })
+    .where({ id: instructorId })   // With update, need to be careful to specifiy ID or else it will update all of the names.
     .returning('*')
     .then(function([data]){
       return data
@@ -38,10 +38,10 @@ function update(instructorId, name){
 function remove(instructorId){
   return (
     db('instructors')
-    .del()
-    .where({ id: instructorId })
-    .returning('*')
-    .then(function([data]){
+    .del()                        // Delete the inctructor
+    .where({ id: instructorId })  // Specifiying what to delete
+    .returning('*')               // And while deleting, return what we delete
+    .then(function([data]){       //
       delete data.id
       return data
     })

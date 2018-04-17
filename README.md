@@ -4,7 +4,7 @@
 
 ### Create database
 ```
-createdb school_db
+createdb school_dev
 ```
 
 ### Install Node Modules

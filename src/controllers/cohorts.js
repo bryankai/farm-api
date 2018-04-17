@@ -3,7 +3,58 @@ const model = require('../models/cohorts')
 //////////////////////////////////////////////////////////////////////////////
 // Basic CRUD Methods
 //////////////////////////////////////////////////////////////////////////////
+function getAll(req, res, next){
+  model.getAll()
+  .then(function(data){
+    res.status(200).send({data})
+  })
+  .catch(next) //error handling
+}
 
+function getOne(req, res, next){
+  model.getOne(parseInt(req.params.cohortId))
+  .then(function(data){
+    if(data) {
+      return res.status(200).send({ data })
+    }
+    else {
+      throw { status: 404, message: 'Cohorts Not Found' }
+    }
+  })
+  .catch(next)
+}
+
+function create(req, res, next){
+  if(!req.body.name){
+    return next({ status: 400, message:'Bad Request'})
+  }
+
+  model.create(req.body.name)
+  .then(function(data){
+    res.status(201).send({ data })
+  })
+  .catch(next)
+}
+
+function update(req, res, next){
+  if(!req.body.name){
+    return next({ status: 400, message:'Bad Request'})
+  }
+
+  model.update(parseInt(req.params.cohortId), req.body.name)
+  .then(function(data){
+    res.status(200).send({ data })
+  })
+  .catch(next)
+}
+
+function remove(req, res, next){
+  model.remove(parseInt(req.params.cohortId))
+  .then(function(data){
+    res.status(200).send({ data })
+  })
+  .catch(next)
+}
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -11,7 +62,10 @@ const model = require('../models/cohorts')
 //////////////////////////////////////////////////////////////////////////////
 
 function getAllStudents(req, res, next){
-  
+  model.getAllStudents(parseInt(req.params.cohortId))
+  .then(function(data) {
+    return res.status(200).send({ data })
+  })
 }
 
 function getAllInstructors(req, res, next){
@@ -35,6 +89,11 @@ function checkIfCohortExists(req, res, next){
 }
 
 module.exports = {
+  getAll,
+  getOne,
+  create,
+  update,
+  remove,
   getAllStudents,
   getAllInstructors,
   checkIfCohortExists
